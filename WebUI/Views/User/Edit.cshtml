@@ -1,0 +1,68 @@
+﻿@model EditUserModel
+@{
+    ViewData["Title"] = "Edit New User";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" asp-controller="User" method="post">
+
+    <div class="form-group">
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+        <label for="Username">Username</label>
+        <input type="text" class="form-control" id="Username" name="Username" value="@Model.Username" required />
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="Password" name="Password" value="@Model.Password" required />
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" value="@Model.ConfirmPassword" required />
+        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="UserFullName">Full Name</label>
+        <input type="text" class="form-control" id="UserFullName" name="UserFullName" value="@Model.UserFullName" required />
+        @Html.ValidationMessageFor(model => model.UserFullName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="IsActive">Is Active</label>
+        <input type="checkbox" id="IsActive" name="IsActive" @(Model.IsActive ? "checked" : "") />
+    </div>
+    <div class="form-group">
+        <label for="DateOfBirth">Date of Birth</label>
+        <input type="date" class="form-control" id="DateOfBirth" 
+        name="DateOfBirth" 
+        value="@Model.DateOfBirth.ToString("yyyy-MM-dd")"
+        max="@DateTime.Now.ToString("yyyy-MM-dd")"
+        required />
+        @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+
+</form>
+
+<!-- Display general form errors -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}

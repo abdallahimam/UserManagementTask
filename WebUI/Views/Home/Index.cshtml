@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @if (TempData["WelcomeMessage"] != null)
+    {
+        <h1 class="display-4">@TempData["WelcomeMessage"]</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome to the Home Page!</h1>
+    }
+
+</div>

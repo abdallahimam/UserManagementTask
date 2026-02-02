@@ -1,0 +1,66 @@
+﻿@model IEnumerable<UserDto>
+@{
+    ViewData["Title"] = "Users";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a href="@Url.Action("Create", "User")" class="btn btn-success mb-3">Create New User</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Active</th>
+            <th>Date of Birth</th>
+            <th>Creation Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Username</td>
+                <td>@user.UserFullName</td>
+                <td>@(user.IsActive ? "Yes" : "No")</td>
+                <td>@user.DateOfBirth.ToShortDateString()</td>
+                <td>@user.CreationDate.ToShortDateString()</td>
+                <td>
+                    <a href="@Url.Action("Edit", "User", new { id = user.Id })" class="btn btn-primary btn-sm">Edit</a>
+                    @using (Html.BeginForm("Delete", "User", new { id = user.Id }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                    }
+                    @* <a href="@Url.Action("Delete", "User", new { id = user.Id })" class="btn btn-danger btn-sm">Delete</a> *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p>No users found.</p>
+}
+
+
