@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UserManagementTask.Application.DTOs;
 using UserManagementTask.Core.Interfaces;
 using UserManagementTask.WebUI.Models;
 
@@ -30,10 +31,10 @@ namespace UserManagementTask.WebUI.Controllers
 
                 var cookieOptions = new CookieOptions
                 {
-                    Expires = DateTime.Now.AddMinutes(30),  // Cookie expiration time
-                    HttpOnly = true,  // Make cookie inaccessible to JavaScript
-                    IsEssential = true,  // Mark as essential for GDPR
-                    SameSite = SameSiteMode.Strict  // Prevent CSRF attacks by restricting cookie access
+                    Expires = DateTime.Now.AddMinutes(30),
+                    HttpOnly = true,
+                    IsEssential = true,
+                    SameSite = SameSiteMode.Strict
                 };
 
                 Response.Cookies.Append("UserModel", serializedModel, cookieOptions);
@@ -51,7 +52,26 @@ namespace UserManagementTask.WebUI.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View(new LoginModel());
+            var user = _authService.GetLoggedinUser();
+
+            if (string.IsNullOrEmpty(user))
+                return View(new LoginModel());
+
+            TempData["WelcomeMessage"] = $"Welcome, {user}!";
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            var logoutSuccess = _authService.Logout();
+            if (logoutSuccess)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            TempData["ErrorMessage"] = "Logout failed. Please try again.";
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -102,9 +102,9 @@ namespace UserManagementTask.WebUI.Controllers
 
             var user = await _userService.GetUserByIdAsync(Id);
 
-            user.Username = model.Username;
-            user.UserFullName = model.UserFullName;
-            user.Password = model.Password;
+            user.Username = model.Username!;
+            user.UserFullName = model.UserFullName!;
+            user.Password = model.Password!;
             user.IsActive = model.IsActive;
             user.DateOfBirth = model.DateOfBirth;
 
@@ -128,8 +128,6 @@ namespace UserManagementTask.WebUI.Controllers
             TempData["SuccessMessage"] = "User deleted successfully.";
 
             return RedirectToAction(nameof(Index));
-
-            //return Ok(new { message = "User deleted successfully." });
         }
     }
 }

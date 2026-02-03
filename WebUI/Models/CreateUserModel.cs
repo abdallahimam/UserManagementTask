@@ -26,7 +26,7 @@ namespace UserManagementTask.WebUI.Models
         public string? ConfirmPassword { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         [Required]
         public DateTime DateOfBirth { get; set; } = DateTime.Now;
